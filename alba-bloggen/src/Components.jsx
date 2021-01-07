@@ -7,7 +7,13 @@ import MontserratWoff from './fonts/Montserrat.woff';
 import MontserratWoff2 from './fonts/Montserrat.woff2';
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'
-
+const devMode = false
+let appUrl
+if(devMode){
+    appUrl = "http://localhost:9000"
+} else {
+    appUrl = "https://dt162gproject.herokuapp.com"
+}
 /***React projekt by Cristina Löfqvist Mid University Sweden***/
 
 /**
@@ -352,7 +358,7 @@ export const RegisterForm = (props) => {
             //alert("No field can be empty")
         } else {
             const body = { firstName: firstName, lastName: lastName, userName: userName, email: email, password: password }
-            data = callRestApi("http://localhost:9000/user/create", "POST", body)
+            data = callRestApi(appUrl + "/user/create", "POST", body)
             sendData = true;
             resetUserName();
             resetPassword();
@@ -369,7 +375,7 @@ export const RegisterForm = (props) => {
      */
     const handleSubmitLogout = (evt) => {
         evt.preventDefault();
-        callRestApi("http://localhost:9000/user/logout", "POST")
+        callRestApi(appUrl + "/user/logout", "POST")
         sessionStorage.removeItem('loggedin');
         window.location.reload();
     }
@@ -445,7 +451,7 @@ export const LoginForm = (props) => {
             alert("No field can be empty")
         } else {
             const body = { cred: { userName: userName.current.value, password: password.current.value } }
-            const data = await callRestApi("http://localhost:9000/user/login", "POST", body)
+            const data = await callRestApi(appUrl + "/user/login", "POST", body)
             /**
              * Checks for the response data from above call to /user/login called in Submithandler
              */
@@ -497,7 +503,7 @@ export const PostForm = (props) => {
             //alert("No field can be empty")
         } else {
             const body = { title: title.current.value, content: content.current.value }
-            const data = await callRestApi("http://localhost:9000/blogg/posts/add/" + loggedin, "POST", body)
+            const data = await callRestApi(appUrl + "/blogg/posts/add/" + loggedin, "POST", body)
             if (data.error) {
                 return (
                     <div>Error: {data.error.message}</div>
@@ -539,7 +545,7 @@ export const Home = () => {
      */
     const handleSubmitLogout = async (evt) => {
         evt.preventDefault();
-        const data = await callRestApi("http://localhost:9000/user/logout/" + loggedin, "POST")
+        const data = await callRestApi(appUrl + "/user/logout/" + loggedin, "POST")
         if (data.error) {
             return (
                 <div>Error: {data.error.message}</div>
@@ -612,7 +618,7 @@ export const Login = () => {
     */
     const handleSubmitLogout = (evt) => {
         evt.preventDefault();
-        const data = callRestApi("http://localhost:9000/user/logout/" + loggedin, "POST")
+        const data = callRestApi(appUrl + "/user/logout/" + loggedin, "POST")
         if (data.error) {
             return (
                 <div>Error: {data.error.message}</div>
@@ -669,7 +675,7 @@ const UpdateForm = () => {
         } else {
             const body = { email: newEmail }
             console.log(body)
-            data = callRestApi("http://localhost:9000/user/update/" + window.sessionStorage.getItem("loggedin"), "PUT", body)
+            data = callRestApi(appUrl + "/user/update/" + window.sessionStorage.getItem("loggedin"), "PUT", body)
             resetNewEmail();
         }
     }
@@ -715,7 +721,7 @@ export const Blogg = () => {
     /**
      * Hooks to call rest api for get posts and check if a user is currently logged in
      */
-    const posts = useRestApiCall("http://localhost:9000/blogg/posts/get", "GET")
+    const posts = useRestApiCall(appUrl + "/blogg/posts/get", "GET")
     const loggedin = window.sessionStorage.getItem("loggedin")
 
     /**
@@ -738,7 +744,7 @@ export const Blogg = () => {
 
                                     <>
                                         <Button onClick={async () => {
-                                            const data = await callRestApi("http://localhost:9000/blogg/posts/delete/" + post.postId + "/" + loggedin, "DELETE")
+                                            const data = await callRestApi(appUrl + "/blogg/posts/delete/" + post.postId + "/" + loggedin, "DELETE")
                                             if (data.error) {
                                                 return (
                                                     <div>Error: {data.error.message}</div>
