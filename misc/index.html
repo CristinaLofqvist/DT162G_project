@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--*********************************************************************
+ * Webbsite blogg Javascript baserad webbutveckling.
+ * Written by Cristina Löfqvist/ Mid Sweden University in August-2020.
+ *********************************************************************-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" type="text/css" href="./css/styles.css">
+        <link rel="stylesheet" type="text/css" href="./css/flexboxtempaltes.css">
+        <link rel="stylesheet" type="text/css" href="./css/normalize.css">
+        <title>Document</title>
+        <script src="burger.js"></script>
+        <script>
+            /*Show bloggposts*/
+            function getPosts() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "/blogg/posts/get", true);
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = this.responseText;
+                        var posts = JSON.parse(response);
+                        var postarea = document.getElementById("post-area");
+                        postarea.innerHTML = "";
+                        var innerposthtml = ""//
+                        for (var i = 0; i < posts.length; i++) {
+                            //innerposthtml += posts[i].userName + "<br>" + posts[i].title + "<br>" + posts[i].content + "<br>" + posts[i].postDate;
+                            //innerposthtml += "<br>" + "<br>" + "<br>";
+
+                            //postarea.innerHTML = innerposthtml;//
+
+                            /*var username = posts[i].userName;
+                            var userNamePost = document.createElement("h5");
+                            userNamePost.className = "userNamePost";
+                            userNamePost.innerHTML = username;*/
+
+                            const username = posts[i].userName;
+                            const userNamePost = <h5>Hello, {username}</h5>;
+
+                            ReactDOM.render(
+                            element,
+                            document.getElementById('userNamePost')
+                            );
+
+                            var Title = posts[i].title;
+                            var titlePost = document.createElement("h3");
+                            titlePost.className = "titlePost";
+                            titlePost.innerHTML = Title;
+
+                            var Content = posts[i].content;
+                            var contentPost = document.createElement("p");
+                            contentPost.className = "contentPost";
+                            contentPost.innerHTML = Content;
+
+                            var Datep = posts[i].postDate;
+                            var datePost = document.createElement("p");
+                            datePost.className = "datePost";
+                            datePost.innerHTML = Datep;
+
+                            postarea.appendChild(userNamePost);
+                            postarea.appendChild(titlePost);
+                            postarea.appendChild(contentPost);
+                            postarea.appendChild(datePost);
+                        }
+                    }
+                };
+                xhttp.send();
+            }
+
+            /*Tar värdet från input elementet i form*/
+            function addPost() {
+                let user_name = document.getElementById("messageForm").elements[0].value;
+                let title = document.getElementById("messageForm").elements[1].value;
+                let content = document.getElementById("messageForm").elements[2].value;
+                //let date = document.getElementById("postDate").value;
+                if (user_name == null) {
+
+                    return
+                }
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/blogg/posts/add", true)
+                xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        //alert(xhttp.responseText);
+                    }
+                }
+                let json = JSON.stringify({
+                    userName: user_name,
+                    title: title,
+                    content: content
+
+                });
+                xhttp.send(json);
+                //location.reload();
+            }
+
+            /* Tar värdet för input elememtet för att logga in */
+            function loginUser() {
+                let userName = document.getElementById("loginForm").elements[0].value;
+                let password = document.getElementById("loginForm").elements[1].value;
+                if (userName == null || userName == "") {
+                    alert("Var vänlig fyll i användarnamn")
+                    return false
+                }
+                if (password == null || password == "") {
+                    alert("Var vänli fyll i lösenord")
+                    return false
+                }
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/user/login", false)
+                xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        //alert(xhttp.responseText);
+                        //alert("Inlogging lyckades")
+                        //location.reload();
+                        showBloggEditor()
+                    }
+                }
+                let json = JSON.stringify({
+                    cred: {
+                        userName: userName,
+                        password: password
+                    }
+                });
+                xhttp.send(json);
+
+
+            }
+            /* get the modal */
+            var modal = document.getElementById('modalLoggin');
+
+            /* När användaren klickar utanför modal, stängs den */
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            function showBloggEditor() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "/user/loggedin", true);
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                        let bloggEditor = document.getElementById("bloggEditor")
+                        bloggEditor.innerHTML = "";
+
+                        //<h2>Skriv gärna ett blogginlägg</h2>
+                        let bloggHeading = document.createElement("h2");
+                        bloggHeading.innerHTML = "Skriv gärna ett blogginlägg";
+
+                        //<form id="messageForm">
+                        let bloggForm = document.createElement("form");
+                        bloggForm.id = "messageForm";
+                        bloggForm.class = "messageForm";
+
+                        //<label>Namn</label>
+                        let bloggFormLabel = document.createElement("label");
+                        bloggFormLabel.innerHTML = "Namn";
+                        bloggFormLabel.id = "formName"
+
+                        //<input id="username" type="text" name="author" class="inputArea" placeholder="Ditt namn...">
+                        let bloggFormInput = document.createElement("input");
+                        bloggFormInput.id = "username";
+                        bloggFormInput.type = "text";
+                        bloggFormInput.name = "author";
+                        bloggFormInput.className = "inputArea";
+                        bloggFormInput.placeholder = "Ditt namn...";
+
+                        //<label>Titel</label>
+                        let bloggFormLabelII = document.createElement("label");
+                        bloggFormLabelII.innerHTML = "Titel";
+
+                        //<textarea name="title" id='title' placeholder="Titel..."></textarea>
+                        let bloggTextarea = document.createElement("textarea");
+                        bloggTextarea.id = "title";
+                        bloggTextarea.name = "title";
+                        bloggTextarea.placeholder = "Titel...";
+
+                        //<label>Blogginlägg</label>
+                        let bloggFormLabelIII = document.createElement("label");
+                        bloggFormLabelIII.innerHTML = "Blogginlägg";
+
+                        //<textarea name="message" id='bloggPost' placeholder="Ditt blogginlägg..."></textarea>
+                        let bloggTextareaII = document.createElement("textarea");
+                        bloggTextareaII.id = "bloggPost";
+                        bloggTextareaII.name = "message";
+                        bloggTextareaII.placeholder = "Ditt blogginlägg...";
+
+                        //<div class="newPost">
+                        let newPost = document.createElement("div")
+
+                        //<button onclick="addPost()">NyttInlägg</button>
+                        let bloggTextareaButton = document.createElement("button");
+                        bloggTextareaButton.innerHTML = "Nytt inlägg";
+                        bloggTextareaButton.onclick = addPost
+
+                        //<a onclick="getPosts()" href="#">Visa data</a>
+                        let bloggA = document.createElement("a");
+                        bloggA.onclick = getPosts
+                        bloggA.href = "#"
+                        bloggA.innerHTML = "Visa inlägg"
+
+                        //<h3 id="font2">Blogginlägg:</h3>
+                        let bloggHeadingII = document.createElement("h3");
+                        bloggHeading.id = "font2";
+                        bloggHeading.innerHTML = "Blogginlägg";
+
+                        //<div id="post-area">
+                        let postArea = document.createElement("div");
+                        postArea.id = "post-area"
+
+                        //<br>
+                        let br = document.createElement("br")
+
+                        bloggEditor.appendChild(bloggHeading)
+
+                        bloggForm.appendChild(bloggFormLabel)
+                        bloggForm.appendChild(bloggFormInput)
+                        bloggForm.appendChild(br)
+                        bloggForm.appendChild(bloggFormLabelII)
+                        bloggForm.appendChild(bloggTextarea)
+                        bloggForm.appendChild(br)
+                        bloggForm.appendChild(bloggFormLabelIII)
+                        bloggForm.appendChild(bloggTextareaII)
+                        bloggForm.appendChild(br)
+                        newPost.appendChild(bloggTextareaButton)
+                        bloggForm.appendChild(newPost)
+                        bloggEditor.appendChild(bloggForm)
+
+
+                        let brEl = document.createElement("br")
+                        let logoutb = document.createElement("button")
+                        logoutb.id = "logout-button"
+                        logoutb.onclick = logout
+                        logoutb.innerHTML = "Logga ut"
+                        bloggEditor.appendChild(brEl);
+                        bloggEditor.appendChild(logoutb);
+
+                        let loginb = document.getElementById("login-button");
+                        loginb.style.display = "none";
+                    }
+                }
+                xhttp.send();
+            }
+
+            function logout() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/user/logout", true)
+                xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        let loginb = document.getElementById("login-button");
+                        loginb.style.display = "block";
+                        let bloggEditor = document.getElementById("bloggEditor");
+                        bloggEditor.innerHTML = ""
+                        //alert(xhttp.responseText);
+                        //alert("Inlogging lyckades")
+                        location.reload();
+                    }
+                }
+                xhttp.send();
+
+            }
+
+            function showBlogg() {
+                toggleHidden('header-nav', 800, 'burger')
+                showBloggEditor()
+                let postArea = document.getElementById("post-area");
+                postArea.innerHTML = "";
+                let bloggHeadingII = document.createElement("h3");
+                bloggHeadingII.id = "font2";
+                bloggHeadingII.innerHTML = "Blogginlägg";
+                postArea.appendChild(bloggHeadingII)
+                getPosts()
+            }
+        </script>
+    </head>
+
+    <body onload="showBlogg()" onresize="toggleHidden('header-nav', 800, 'burger')">
+        <header class="flexbox flex-direction-column flex-align-i-center">
+            <div class="flexbox flex-direction-column flex-align-i-center flex-justify-flex-start h-100 w-100">
+                <div class="firstHeading flexbox flex-direction-row flex-justify-space-between w-100">
+                    <!--<a href="index.html"><img src="./Images/Logo.png" alt="Logo" class="logo" id="logo"></a>-->
+                    <div
+                        class="flexbox flex-direction-row bag-and-search flex-align-i-center flex-justify-space-evenly">
+                        <div id="burger" onclick="toggleOpenBurger('burger','header-nav','flex')">
+                            <div class="burger-bun"></div>
+                            <div class="burger-bun"></div>
+                            <div class="burger-bun"></div>
+                        </div>
+                    </div>
+                </div>
+                <nav id="header-nav" class="show nav flexbox flex-direction-row flex-align-i-flex-end">
+                    <a href="">Om oss</a>
+                    <a href="">Kontakt</a>
+                </nav>
+                <h1 id="mainHeading">Blogg</h1>
+
+            </div>
+        </header>
+
+        <aside class="flexbox flex-direction-column">
+            <link rel="register" href="register.html">
+            <!-- Button to open a modal login form -->
+            <button onclick="document.getElementById('modalLoggin') .style.display='block'"
+                id="login-button">Logga in</button>
+            <!-- The modal-->
+            <div id="modalLoggin" class="modal">
+                <span onclick="document.getElementById('modalLoggin').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <!-- Modal content -->
+                <form class="model-content-animate" id="loginForm">
+                    <img src="./Images/icons8-customer-64.png" alt="Avatar" class="icon">
+                    <!--<div class="container">-->
+                    <label for="uname"><b>Användarnamn:</b></label>
+                    <input id="username" type="text" name="author" class="inputArea" placeholder="Ditt användarnamn..."
+                        required>
+                    <br>
+                    <label for="psw"><b>Lösenord:</b></label>
+                    <input id="password" type="text" name="author" class="inputArea" placeholder="Ditt lösenord..."
+                        required></input>
+                    <button onclick="loginUser()" type="submit">Logga in</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember">Kom ihåg användaruppgifter
+                    </label>
+                    <span class="psw">Glömt lösenord <a href="#">Lösenord?</a></span>
+
+                </form>
+            </div>
+            <br>
+            <a href="register.html"><button id="asidelink">Registrera ny användare</button></a>
+        </aside>
+        <main id="main_content" class="flexbox flex-direction-column flex-align-i-center">
+            <div id="bloggEditor" class="flexbox flex-direction-column flex-justify-space-evenly flex-align-i-center">
+            </div>
+            <div class="flexbox flex-direction-column flex-justify-center" id="bloggHeading">
+                <h2 id="BloggHeading">Senaste blogginlägg</h2>
+                <img src="./Images/icons8-book-and-pencil-100.png" width="50" height="50"
+                    alt="Ikon bild av en öppne bok" />
+            </div>
+            <div id="post-area">
+            </div>
+        </main>
+        <!--/div>
+            end of div ng-app-->
+        <footer class="flexbox flex-direction-row flex-justify-space-evenly">
+            <div class="footerPitch">
+                <h4>Lämna en kommentar</h4>
+            </div>
+            <div class="footericons flexbox flex-direction-row">
+                <div class="socialmedia">
+                    <h5>Följ oss på socialamedier</h5>
+
+                    <img src="./Images/facebok.png" alt="facebokicon" class="socialmediaIcon">
+                    <img src="./Images/instagram.png" alt="instagramicon" class="socialmediaIcon">
+                    <img src="./Images/linkedin.png" alt="linkedinicon" class="socialmediaIcon">
+                    <img src="./Images/pinterest.png" alt="pinteresticon" class="socialmediaIcon">
+                    <img src="./Images/youtube.png" alt="youtubeicon" class="socialmediaIcon">
+                </div>
+                <div class="copyright flexbox flex-direction-row flex-justify-flex-end">
+                    <img src="./Images/icons8-copyright-26.png" alt="copyrighticon" class="copyrightIcon">
+                    <h5>Cristina Löfqvist</h5>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>
+</body>
+
+</html>

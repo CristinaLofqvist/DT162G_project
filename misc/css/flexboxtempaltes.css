@@ -1,0 +1,161 @@
+
+
+/** Make a flexbox **/
+
+.flexbox {
+    display: flex;
+}
+
+/** Make a flexbox END **/
+
+/** Directions **/
+
+.flex-direction-column {
+    flex-direction: column;
+}
+
+.flex-direction-row {
+    flex-direction: row;
+}
+
+.flex-direction-row-reverse {
+    flex-direction: row-reverse;
+}
+
+/** Directions END **/
+
+/** Justify content **/
+
+.flex-justify-space-around {
+    justify-content: space-around;
+}
+
+.flex-justify-space-between {
+    justify-content: space-between;
+}
+
+.flex-justify-space-evenly {
+    justify-content: space-evenly;
+}
+
+.flex-justify-center {
+    justify-content: center;
+}
+
+.flex-justify-flex-start {
+    justify-content: flex-start;
+}
+
+.flex-justify-flex-end {
+    justify-content: flex-end;
+}
+
+.flex-justify-start {
+    justify-content: start;
+}
+
+.flex-justify-end {
+    justify-content: end;
+}
+
+.flex-justify-right {
+    justify-content: right;
+}
+
+.flex-justify-left {
+    justify-content: left;
+}
+
+/** Justify content END **/
+
+/** Align items **/
+
+.flex-align-i-stretch {
+    align-items: stretch;
+}
+
+.flex-align-i-flex-start {
+    align-items: flex-start;
+}
+
+.flex-align-i-flex-end {
+    align-items: flex-end;
+}
+
+.flex-align-i-center {
+    align-items: center;
+}
+
+.flex-align-i-baseline {
+    align-items: baseline;
+}
+
+.flex-align-i-first-baseline {
+    align-items: first baseline;
+}
+
+.flex-align-i-last-baseline {
+    align-items: last baseline;
+}
+
+.flex-align-i-self-start {
+    align-items: self-start;
+}
+
+.flex-align-i-self-end {
+    align-items: self-end;
+}
+
+/** Align items END **/
+
+/** Align content **/
+
+.flex-align-c-space-around {
+    align-content: space-around;
+}
+
+.flex-align-c-space-between {
+    align-content: space-between;
+}
+
+.flex-align-c-space-evenly {
+    align-content: space-evenly;
+}
+
+.flex-align-c-stretch {
+    align-content: stretch;
+}
+
+.flex-align-c-flex-start {
+    align-content: flex-start;
+}
+
+.flex-align-c-flex-end {
+    align-content: flex-end;
+}
+
+.flex-align-c-center {
+    align-content: center;
+}
+
+.flex-align-c-baseline {
+    align-content: baseline;
+}
+
+.flex-align-c-first-baseline {
+    align-content: first baseline;
+}
+
+.flex-align-c-last-baseline {
+    align-content: last baseline;
+}
+
+.flex-align-c-start {
+    align-content: start;
+}
+
+.flex-align-c-end {
+    align-content: end;
+}
+
+/** Align content END **/
