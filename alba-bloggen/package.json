@@ -1,5 +1,6 @@
 {
   "name": "alba-bloggen",
+  "homepage": "https://www.willbur.nu",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
