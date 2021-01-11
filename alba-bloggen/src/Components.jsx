@@ -73,6 +73,7 @@ const callRestApi = async (url, method, body, withCredentials, headers = { 'Cont
         method: requestData.method,
         headers: requestData.headers,
         credentials: requestData.credentials,
+        origin: "https://www.willbur.nu",
         body: JSON.stringify(requestData.body)
     }
     if (!requestData.url) {
@@ -107,10 +108,11 @@ const useRestApiCall = (url, method, body, withCredentials, headers = { 'Content
     const [isLoaded, setIsLoaded] = useState(false);
     const [data, setData] = useState(null);
     const [status, setStatus] = useState(null);
-
+    var raw = "";
     const requestData = {
         url: url,
         method: method,
+        origin: "https://willbur.nu",
         headers: headers,
     }
     if (withCredentials) {
@@ -125,6 +127,7 @@ const useRestApiCall = (url, method, body, withCredentials, headers = { 'Content
             method: requestData.method,
             headers: requestData.headers,
             credentials: requestData.credentials,
+            origin: "https://willbur.nu",
             body: JSON.stringify(requestData.body)
         }
         if (!requestData.url) {
